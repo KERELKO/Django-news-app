@@ -9,6 +9,7 @@ urlpatterns = [
     path('news/', include('apps.articles.urls', namespace='articles')),
     path('content/', include('apps.content.urls', namespace='content')),
     path('users/', include('apps.users.urls', namespace='users')),
+    path('api-auth/', include('rest_framework.urls')),
 ]
 
 if settings.DEBUG:
