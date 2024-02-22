@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{% block title %}News Site{% endblock %}</title>
+</head>
+<body>
+	{% if request.user.is_authenticated %}
+		<a href="{% url 'users:logout' %}">logout</a>
+	{% else %}
+		<a href="{% url 'users:registration' %}">register</a>
+		<a href="{% url 'users:login' %}">login</a>
+	{% endif %}
+	{% block content %}
+	{% endblock %}
+</body>
+</html>

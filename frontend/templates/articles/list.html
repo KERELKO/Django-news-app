@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+	{% for article in articles %}
+		<ul>
+			<li><a href="{{ article.get_absolute_url }}">title:{{ article.title }}</a></li>
+			<li><a href="{% url 'articles:edit' article.id %}">edit</a></li>
+			<li><a href="{% url 'articles:delete' article.id %}">delete</a></li>
+			<li>topic:{{ article.topic }}</li>
+			<li>topic slug:{{ article.topic.slug }}</li>
+		</ul>
+	{% endfor %}
+{% endblock %}

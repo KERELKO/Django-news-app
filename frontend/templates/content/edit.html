@@ -1,0 +1,6 @@
+<h3>Edit {{ model_name }} for "{{ article.title }}"</h3>
+<form action="{% url 'content:edit' article.id model_name content.id %}" method="post">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<input type="submit" value="save">
+</form>

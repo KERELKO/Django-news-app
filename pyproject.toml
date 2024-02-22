@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "news app"
+version = "0.1.0"
+description = "News app where users can observe different news chose topic and track the most popular news or the most interesting news. This app uses Redis, Docker powerful api and a lot of other stuff"
+authors = ["Kerelko Barabash <kerelkobarabash@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+asgiref = "3.7.2"
+certifi = "2024.2.2"
+charset-normalizer = "3.3.2"
+django = "5.0.2"
+django-embed-video = "1.4.9"
+idna = "3.6"
+pillow = "10.2.0"
+requests = "2.31.0"
+sqlparse = "0.4.4"
+typing-extensions = "4.9.0"
+urllib3 = "2.2.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
