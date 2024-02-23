@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+	<a href="{% url 'api:news:topic-detail' 1 %}">api</a>
 	{% for article in articles %}
 		<ul>
 			<li><a href="{{ article.get_absolute_url }}">title:{{ article.title }}</a></li>
