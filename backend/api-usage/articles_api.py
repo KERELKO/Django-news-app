@@ -1,5 +1,10 @@
+import os
 import asyncio 
 import httpx
+from dotenv import load_dotenv
+
+load_dotenv()
+DOMAIN = os.getenv('DOMAIN')
 
 
 async def get_articles_list(url: str) -> dict:
@@ -7,14 +12,14 @@ async def get_articles_list(url: str) -> dict:
 		response = await client.get(url)
 		if response.is_redirect:
 			redirect_url = response.headers['location']
-			response = await client.get('http://127.0.0.1:8000' + redirect_url)
-	print(response.json())
+			response = await client.get(DOMAIN + redirect_url)
+	return response.json()
 
 
 async def main() -> None:
-	url = 'http://127.0.0.1:8000/api/news/articles/6?format=json'
-	await get_articles_list(url)
-
+	url = f'{DOMAIN}/api/news/articles/10?format=json'
+	response = await get_articles_list(url)
+	print(response)
 
 if __name__ == '__main__':
 	asyncio.run(main())
