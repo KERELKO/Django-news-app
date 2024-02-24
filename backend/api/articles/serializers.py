@@ -31,10 +31,7 @@ class LinkedArticleWithContentSerializer(LinkedArticleSerializer):
 	content = ContentSerializer(many=True)
 	class Meta:
 		model = Article  
-		fields = [
-			'id', 'title', 'slug', 'topic', 
-			'source', 'is_active', 'published', 'content'
-		]
+		fields = LinkedArticleSerializer.Meta.fields + ['content']
 
 
 class ArticleSerializer(serializers.ModelSerializer):
@@ -46,11 +43,8 @@ class ArticleSerializer(serializers.ModelSerializer):
 		]
 
 
-class ArticleWithContentSerializer(serializers.ModelSerializer):
+class ArticleWithContentSerializer(ArticleSerializer):
 	content = ContentSerializer(many=True)
 	class Meta:
 		model = Article  
-		fields = [
-			'id', 'title', 'slug', 'topic', 
-			'source', 'is_active', 'published', 'content'
-		]
+		fields = ArticleSerializer.Meta.fields + ['content']
