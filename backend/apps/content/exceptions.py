@@ -1,8 +1,4 @@
-class ModelException(Exception):
-	pass  
-
-
-class IncorrectModelNameError(ModelException):
+class IncorrectModelNameError(ValueError):
 	def __init__(self, model_name: str):
 		self.model_name = model_name  
 

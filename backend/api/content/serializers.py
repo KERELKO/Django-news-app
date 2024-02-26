@@ -4,7 +4,6 @@ from apps.content.models import Content
 
 
 class ItemRelatedField(serializers.RelatedField):
-	
 	def to_representation(self, value):
 		return value.render()
 

@@ -2,7 +2,7 @@ import os
 from .main import *
 
 
-DEBUG = False
+DEBUG = True
 
 ADMINS = [
 	('Kyryl Barabash', 'kerelkobarabash@gmail.com'),

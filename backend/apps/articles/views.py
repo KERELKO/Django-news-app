@@ -4,6 +4,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
+from django.core.cache import cache
 from django.urls import reverse_lazy
 
 from .models import Article, Topic, Comment
