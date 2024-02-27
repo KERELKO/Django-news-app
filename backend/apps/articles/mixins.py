@@ -4,7 +4,7 @@ from django.http import HttpResponse
 class AuthorMixin:
 	"""
 	Mixin to restrict access based on the author of an object
-	Model must has 'author'(ForeignKey) field to use this mixin
+	Model must have 'author'(ForeignKey) field to use this mixin
 	"""
 	def dispatch(self, request, *args, **kwargs):
 		if request.user != self.get_object().author:

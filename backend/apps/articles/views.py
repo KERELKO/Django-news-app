@@ -5,11 +5,14 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.core.cache import cache
+from django.conf import settings
 from django.urls import reverse_lazy
 
 from .models import Article, Topic, Comment
 from .mixins import AuthorMixin
 from .forms import CommentForm
+
+r = settings.DEFAULT_REDIS_CLIENT
 
 
 class ArticleListView(ListView):
@@ -73,9 +76,16 @@ class ArticleDetailView(DetailView):
 		return cache_result
 
 	def get_context_data(self, **kwargs):
+		article = self.get_object()
+		# increase views of the article by 1
+		views = r.incr(f'article:{article.id}:views')
+		# add this article to the sorted set of elements, 
+		# if it doesn't exist, or increase its rating by 1
+		r.zincrby('article_ranking', 1, article.id)
 		context = super().get_context_data(**kwargs)
 		form = CommentForm()
 		context['form'] = form  
+		context['views'] = views
 		return context
 
 	def post(self, request, slug, *args, **kwargs):

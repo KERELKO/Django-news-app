@@ -1,3 +1,4 @@
+import redis
 from .main import * 
 
 
@@ -32,3 +33,13 @@ CACHES = {
 }
 
 AUTH_PASSWORD_VALIDATORS = []
+
+REDIS_HOST = 'localhost'
+REDIS_DB = 1 
+REDIS_PORT = 6379
+
+DEFAULT_REDIS_CLIENT = redis.Redis(
+    host=REDIS_HOST,
+    port=REDIS_PORT,
+    db=REDIS_DB
+)
