@@ -14,7 +14,6 @@ from .forms import CommentForm
 
 class ArticleListView(ListView):
 	topic_slug = None
-	queryset = Article.active.all()
 	context_object_name = 'articles'
 	template_name = 'articles/list.html'
 
@@ -24,11 +23,24 @@ class ArticleListView(ListView):
 		return super().dispatch(request)
 
 	def get_queryset(self):
-		qs = super().get_queryset()
 		if self.topic_slug:
 			topic = get_object_or_404(Topic, slug=self.topic_slug)
-			return qs.filter(topic=topic)
-		return qs
+			key = f'qs_topic:{topic.id}'
+			# check for cache with particular topic
+			cache_result = cache.get(key)
+			if not cache_result:
+				qs = Article.active.all().filter(topic=topic)
+				cache.set(f'qs_topic:{topic.id}', qs, 300)
+				return qs
+			return cache_result
+		# if not topic check default cache
+		key = 'qs'
+		cache_result = cache.get(key)
+		if not cache_result:
+			qs = Article.active.all()
+			cache.set('qs', qs, 300)
+			return qs
+		return cache_result
 
 
 class ArticleCreateView(CreateView, PermissionRequiredMixin):
@@ -43,9 +55,22 @@ class ArticleCreateView(CreateView, PermissionRequiredMixin):
 
 
 class ArticleDetailView(DetailView):
-	model = Article
+	slug = None
 	context_object_name = 'article'
 	template_name = 'articles/detail.html'
+
+	def dispatch(self, request, slug, *args, **kwargs):
+		self.slug = slug  
+		return super().dispatch(request, slug, *args, **kwargs)
+
+	def get_object(self, queryset=None):
+		key = f'article:{self.slug}'
+		cache_result = cache.get(key)
+		if not cache_result or self.request.user.is_staff:
+			article = get_object_or_404(Article, slug=self.slug)
+			cache.set(key, article, 180)
+			return article
+		return cache_result
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -54,7 +79,7 @@ class ArticleDetailView(DetailView):
 		return context
 
 	def post(self, request, slug, *args, **kwargs):
-		article = get_object_or_404(Article, slug=slug)
+		article = self.get_object()
 		form = CommentForm(data=request.POST)
 		if form.is_valid():
 			comment = form.save(commit=False)

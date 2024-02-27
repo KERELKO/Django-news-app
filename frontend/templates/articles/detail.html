@@ -1,33 +1,38 @@
-<ul>
-	<li>{{ article.title }}</li>
-	<li>{{ article.topic }}</li>
-	<li>{{ article.description }}</li>
-	<li>{{ article.published }}</li>
-	{% for item in article.content.all %}
-		<p>
-			{{ item.content.render }}
-			<a href="{% url 'content:delete' article.id item.id %}">Delete</a>
-  		<a href="{% url 'content:edit' article.id item.content_type.model item.id %}">edit</a>
-  	</p>
-	{% endfor %}
-	{% if request.user.is_staff %}
-		<h4>Create content:</h4>
-		<p><a href="{% url 'content:create' article.id 'text' %}">add text</a></p>
-		<p><a href="{% url 'content:create' article.id 'image' %}">add image</a></p>
-		<p><a href="{% url 'content:create' article.id 'video' %}">add video</a></p>
-	{% endif %}
-	<h2>Comments:</h2>
-	{% if request.user.is_authenticated %}
-		{% include "comments/create.html" %}
-	{% else %}
-		<a href="#">You need to be logged in to write comments</a>
-	{% endif %}
-	{% for comment in article.comments.all %}
-		<h3>{{ comment.author }}</h3>
-		<p>{{ comment.body|linebreaks }}</p>
-		{% if request.user == comment.author %}
-			<a href="{% url 'articles:comment_edit' comment.id %}">Edit</a>
-			<a href="{% url 'articles:comment_delete' comment.id %}">Delete</a>
+{% extends "base.html" %}
+
+{% block content %}
+	<a href="{% url 'articles:edit' article.id %}">Edit</a>
+	<ul>
+		<li>{{ article.title }}</li>
+		<li>{{ article.topic }}</li>
+		<li>{{ article.description }}</li>
+		<li>{{ article.published }}</li>
+			{% for item in article.content.all %}
+				<p>
+					{{ item.content.render }}
+					<a href="{% url 'content:delete' article.id item.id %}">Delete</a>
+		  		<a href="{% url 'content:edit' article.id item.content_type.model item.object_id %}">edit</a>
+		  	</p>
+			{% endfor %}
+		{% if request.user.is_staff %}
+			<h4>Create content:</h4>
+			<p><a href="{% url 'content:create' article.id 'text' %}">add text</a></p>
+			<p><a href="{% url 'content:create' article.id 'image' %}">add image</a></p>
+			<p><a href="{% url 'content:create' article.id 'video' %}">add video</a></p>
 		{% endif %}
-	{% endfor %}
-</ul>
+		<h2>Comments:</h2>
+		{% if request.user.is_authenticated %}
+			{% include "comments/create.html" %}
+		{% else %}
+			<a href="#">You need to be logged in to write comments</a>
+		{% endif %}
+		{% for comment in article.comments.all %}
+			<h3>{{ comment.author }}</h3>
+			<p>{{ comment.body|linebreaks }}</p>
+			{% if request.user == comment.author %}
+				<a href="{% url 'articles:comment_edit' comment.id %}">Edit</a>
+				<a href="{% url 'articles:comment_delete' comment.id %}">Delete</a>
+			{% endif %}
+		{% endfor %}
+	</ul>
+{% endblock %}
