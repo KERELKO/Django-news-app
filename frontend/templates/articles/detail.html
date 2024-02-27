@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+	<a href="{% url 'articles:list' %}">all news</a>
 	<a href="{% url 'articles:edit' article.id %}">Edit</a>
+	<small>views: {{ views }}</small>
 	<ul>
 		<li>{{ article.title }}</li>
 		<li>{{ article.topic }}</li>
