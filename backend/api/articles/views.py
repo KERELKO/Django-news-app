@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 
 from apps.articles.models import Article, Topic
 from . import serializers
@@ -7,24 +8,24 @@ from . import serializers
 
 class ArticleViewSet(viewsets.ModelViewSet):
 	queryset = Article.objects.all()
-	serializer_class = serializers.LinkedArticleSerializer
+	serializer_class = serializers.ArticleSerializer
 	
 	# HyperLinked Serializors
 	@action(
-		methods=['get'],
-		detail=True,
-		serializer_class=serializers.LinkedArticleWithContentSerializer,
+		methods=['get', 'post'],
+		detail=False,
+		serializer_class=serializers.HyperLinkedArticleWithContentSerializer,
 	)
-	def linked_detail_with_content(self, request, *args, **kwargs):
-		return self.retrieve(request, *args, **kwargs)
+	def hyperlinked_with_content(self, request, *args, **kwargs):
+		return self.list(request, *args, **kwargs)
 
 	@action(
-		methods=['get'],
-		detail=True,
-		serializer_class=serializers.LinkedArticleSerializer
+		methods=['get', 'post'],
+		detail=False,
+		serializer_class=serializers.HyperLinkedArticleSerializer
 	)
-	def linked_detail_simple(self, request, *args, **kwargs):
-		return self.retrieve(request, *args, **kwargs)
+	def hyperlinked(self, request, *args, **kwargs):
+		return self.list(request, *args, **kwargs)
 
 	# Simple Serializers
 	@action(
@@ -36,9 +37,10 @@ class ArticleViewSet(viewsets.ModelViewSet):
 		return self.retrieve(request, *args, **kwargs)
 
 	@action(
-		methods=['get'],
+		methods=['get', 'patch', 'delete'],
 		detail=True,
 		serializer_class=serializers.ArticleSerializer,
+		permission_classes=[IsAuthenticated],
 	)
 	def detail_simple(self, request, *args, **kwargs):
 		return self.retrieve(request, *args, **kwargs)

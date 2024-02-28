@@ -4,13 +4,14 @@ from api.content.serializers import ContentSerializer
 from apps.articles.models import Article, Topic
 
 
-class TopicSerializer(serializers.HyperlinkedModelSerializer):
+class TopicSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Topic  
 		fields = ['name', 'id']
 
 
-class LinkedArticleSerializer(serializers.ModelSerializer):
+class HyperLinkedArticleSerializer(serializers.ModelSerializer):
+	published = serializers.DateTimeField(read_only=False) 
 	topic = serializers.HyperlinkedRelatedField(
 		read_only=True,
 		view_name='api:news:topic-detail',
@@ -22,23 +23,24 @@ class LinkedArticleSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Article
 		fields = [
-			'id', 'title', 'slug', 'topic', 
+			'id', 'title', 'slug', 'topic', 'description', 
 			'source', 'is_active', 'published'
 		]
 
 
-class LinkedArticleWithContentSerializer(LinkedArticleSerializer):
+class HyperLinkedArticleWithContentSerializer(HyperLinkedArticleSerializer):
 	content = ContentSerializer(many=True)
 	class Meta:
 		model = Article  
-		fields = LinkedArticleSerializer.Meta.fields + ['content']
+		fields = HyperLinkedArticleSerializer.Meta.fields + ['content']
 
 
 class ArticleSerializer(serializers.ModelSerializer):
+	published = serializers.DateTimeField(read_only=False) 
 	class Meta:
 		model = Article
 		fields = [
-			'id', 'title', 'slug', 'topic', 
+			'id', 'title', 'slug', 'topic', 'description',
 			'source', 'is_active', 'published'
 		]
 

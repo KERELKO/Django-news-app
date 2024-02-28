@@ -7,7 +7,7 @@ load_dotenv()
 DOMAIN = os.getenv('DOMAIN')
 
 
-async def get_articles_list(url: str) -> dict:
+async def get_articles_list(url: str) -> dict | list[dict]:
 	async with httpx.AsyncClient() as client:
 		response = await client.get(url)
 		if response.is_redirect:
@@ -17,9 +17,10 @@ async def get_articles_list(url: str) -> dict:
 
 
 async def main() -> None:
-	url = f'{DOMAIN}/api/news/articles/10?format=json'
+	url = f'{DOMAIN}/api/news/articles/'
 	response = await get_articles_list(url)
 	print(response)
+
 
 if __name__ == '__main__':
 	asyncio.run(main())
