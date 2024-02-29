@@ -1,26 +1,86 @@
-import os
-import asyncio 
-import httpx
-from dotenv import load_dotenv
+import time
+import requests
 
-load_dotenv()
-DOMAIN = os.getenv('DOMAIN')
+BASE_ARTICLE_URL = 'http://127.0.0.1:8000/api/news/articles/'
+BASE_TOPIC_URL = 'http://127.0.0.1:8000/api/news/topics/'
 
 
-async def get_articles_list(url: str) -> dict | list[dict]:
-	async with httpx.AsyncClient() as client:
-		response = await client.get(url)
-		if response.is_redirect:
-			redirect_url = response.headers['location']
-			response = await client.get(DOMAIN + redirect_url)
+def get_article_by_id(id: int) -> dict:
+	url = BASE_ARTICLE_URL + f'{id}'
+	try:
+		response = requests.get(
+			url, 
+			timeout=5
+		)
+		response.raise_for_status()		
+	except requests.Timeout as ex:
+		raise requests.Timeout(
+			f'Timeout error occurred: Request took longer than the specified' 
+			f'timeout period, url: {url}'
+		) from ex
+	except requests.HTTPError as ex:
+		raise requests.HTTPError(
+			f'HTTP error occurred while getting response from: {url}'
+		) from ex
 	return response.json()
 
 
-async def main() -> None:
-	url = f'{DOMAIN}/api/news/articles/'
-	response = await get_articles_list(url)
-	print(response)
+def get_article_list() -> list[dict]:
+	url = BASE_ARTICLE_URL
+	try:
+		response = requests.get(
+			url, 
+			timeout=5
+		)
+		response.raise_for_status()
+	except requests.Timeout as ex:
+		raise requests.Timeout(
+			f'Timeout error occurred: Request took longer than the specified' 
+			f'timeout period, url: {url}'
+		) from ex
+	except requests.HTTPError as ex:
+		raise requests.HTTPError(
+			f'HTTP error occurred while getting response from: {url}'
+		) from ex
+	return response.json()
 
 
-if __name__ == '__main__':
-	asyncio.run(main())
+def get_hyperlinked_article_list() -> list[dict]:
+	url = BASE_ARTICLE_URL + 'hyperlinked/'
+	try:  
+		response = requests.get(
+			url, 
+			timeout=5
+		)
+		response.raise_for_status()
+	except requests.Timeout as ex:
+		raise requests.Timeout(
+			f'Timeout error occurred: Request took longer than the specified' 
+			f'timeout period, url: {url}'
+		) from ex
+	except requests.HTTPError as ex:
+		raise requests.HTTPError(
+			f'HTTP error occurred while getting response from: {url}'
+		) from ex
+	return response.json()
+
+
+def get_topic_list() -> list[dict]:
+	url = BASE_TOPIC_URL
+	try:
+		response = requests.get(
+			url,
+			timeout=5
+		)
+		response.raise_for_status()
+	except requests.Timeout as ex:
+		raise requests.Timeout(
+			f'Timeout error occurred: Request took longer than the specified' 
+			f'timeout period, url: {url}'
+		) from ex
+	except requests.HTTPError as ex:
+		raise requests.HTTPError(
+			f'HTTP error occurred while getting response from: {url}'
+		) from ex
+	return response.json()
+	

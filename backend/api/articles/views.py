@@ -6,6 +6,11 @@ from apps.articles.models import Article, Topic
 from . import serializers
 
 
+class TopicViewSet(viewsets.ModelViewSet):
+	queryset = Topic.objects.all()
+	serializer_class = serializers.TopicSerializer
+
+
 class ArticleViewSet(viewsets.ModelViewSet):
 	queryset = Article.objects.all()
 	serializer_class = serializers.ArticleSerializer
@@ -44,8 +49,3 @@ class ArticleViewSet(viewsets.ModelViewSet):
 	)
 	def detail_simple(self, request, *args, **kwargs):
 		return self.retrieve(request, *args, **kwargs)
-
-
-class TopicViewSet(viewsets.ModelViewSet):
-	queryset = Topic.objects.all()
-	serializer_class = serializers.TopicSerializer

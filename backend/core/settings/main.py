@@ -9,7 +9,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Build base path to the frontend directory 
-BASE_FRONTEND_DIR = BASE_DIR.parent
+BASE_FRONTEND_DIR = BASE_DIR.parent / 'frontend/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -65,7 +65,7 @@ ROOT_URLCONF = 'core.urls'
 
 # Build base path to the template directory, so
 # it gives capability to write: template_name = 'app_name/file.html'
-BASE_TEMPLATE_DIR = BASE_FRONTEND_DIR / 'frontend/templates/'
+BASE_TEMPLATE_DIR = BASE_FRONTEND_DIR / 'templates/'
 
 TEMPLATES = [
     {

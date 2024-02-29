@@ -8,7 +8,7 @@ DEBUG = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_FRONTEND_DIR / 'frontend/static/'
+STATIC_ROOT = BASE_FRONTEND_DIR / 'static/'
 
 MEDIA_URL = 'images/'
 MEDIA_ROOT = STATIC_ROOT / 'images'
