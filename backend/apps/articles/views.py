@@ -1,49 +1,70 @@
 from django.views.generic.list import ListView
-from django.views.generic.base import View
+from django.views.generic.base import View, TemplateResponseMixin
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.core.cache import cache
+from django.core.paginator import Paginator
 from django.conf import settings
 from django.urls import reverse_lazy
 
 from .models import Article, Topic, Comment
 from .mixins import AuthorMixin
 from .forms import CommentForm
+from .utils import get_cache, set_cache
 
 r = settings.DEFAULT_REDIS_CLIENT
 
 
-class ArticleListView(ListView):
-	topic_slug = None
-	context_object_name = 'articles'
+class ArticleListView(TemplateResponseMixin, View):
+	topic_slug = None 
+	paginate_by = 2
+	cache_key = None
+	page = 1
 	template_name = 'articles/list.html'
 
-	def dispatch(self, request, *args, topic_slug=None, **kwargs):
+	def dispatch(self, request, topic_slug=None, *args, **kwargs):
+		self.page = request.GET.get('page')
 		if topic_slug:
 			self.topic_slug = topic_slug
-		return super().dispatch(request)
+			self.cache_key = f'article_list_page:{self.page}|topic:{self.topic_slug}'
+		self.cache_key = f'article_list_page:{self.page}'
+		return super().dispatch(request, *args, **kwargs)
 
 	def get_queryset(self):
 		if self.topic_slug:
 			topic = get_object_or_404(Topic, slug=self.topic_slug)
-			key = f'qs_topic:{topic.id}'
-			# check for cache with particular topic
-			cache_result = cache.get(key)
-			if not cache_result:
-				qs = Article.active.all().filter(topic=topic)
-				cache.set(f'qs_topic:{topic.id}', qs, 300)
-				return qs
-			return cache_result
-		# if not topic check default cache
-		key = 'qs'
-		cache_result = cache.get(key)
-		if not cache_result:
-			qs = Article.active.all()
-			cache.set('qs', qs, 300)
-			return qs
-		return cache_result
+			queryset = Article.active.filter(topic=topic)
+		else:
+			queryset = Article.active.all()
+		return queryset
+
+	def get_context_data(self, **kwargs):
+		context = kwargs
+		qs = self.get_page()
+		context['articles'] = qs
+		context['paginator'] = qs.paginator
+		context['page_obj'] = qs
+		return context
+
+	def get_page(self):
+		paginator = self.get_paginator()
+		qs = get_cache(self.cache_key)
+		if not qs:
+			qs = paginator.get_page(self.page)
+			set_cache(key=self.cache_key, value=qs, time=10)
+		return qs
+
+	def get_paginator(self):
+		paginator = Paginator(
+			self.get_queryset(), 
+			self.paginate_by
+		) 
+		return paginator 
+
+	def get(self, request, *args, **kwargs):
+		return self.render_to_response(self.get_context_data())
 
 
 class ArticleCreateView(CreateView, PermissionRequiredMixin):
@@ -149,9 +170,9 @@ class CommentDeleteView(AuthorMixin, View):
 	def dispatch(self, request, pk, *args, **kwargs):
 		self.pk = pk
 		super().dispatch(request, *args, **kwargs)
-		return self.delete(request)
+		return self.delete(request, pk, *args, **kwargs)
 
-	def delete(self, request):
+	def delete(self, request, pk, *args, **kwargs):
 		comment = self.get_object()
 		article = comment.article
 		comment.delete()

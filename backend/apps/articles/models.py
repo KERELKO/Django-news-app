@@ -7,7 +7,7 @@ USER = settings.AUTH_USER_MODEL
 
 
 class Topic(models.Model):
-	name = models.CharField(max_length=250)
+	name = models.CharField(max_length=100)
 	slug = models.SlugField(blank=True, null=False)
 
 	def save(self, *args, **kwargs):
@@ -64,6 +64,7 @@ class Article(models.Model):
 		ordering = ['-published']
 		indexes = [
 			models.Index(fields=['slug']),
+			models.Index(fields=['topic']),
 		]
 
 	def save(self, *args, **kwargs):

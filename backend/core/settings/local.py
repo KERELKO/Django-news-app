@@ -23,6 +23,8 @@ DATABASES = {
     }
 }
 
+DEFAULT_CACHE_TIMEOUT = 5 * 60
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
