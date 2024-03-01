@@ -1,8 +1,12 @@
-import time
+import os
 import requests
+from dotenv import load_dotenv
 
-BASE_ARTICLE_URL = 'http://127.0.0.1:8000/api/news/articles/'
-BASE_TOPIC_URL = 'http://127.0.0.1:8000/api/news/topics/'
+load_dotenv()
+DOMAIN = os.environ.get('DOMAIN')
+
+BASE_ARTICLE_URL = DOMAIN + '/api/news/articles/'
+BASE_TOPIC_URL = DOMAIN + '/api/news/topics/'
 
 
 def get_article_by_id(id: int) -> dict:

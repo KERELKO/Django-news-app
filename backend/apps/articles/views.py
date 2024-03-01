@@ -1,4 +1,3 @@
-from django.views.generic.list import ListView
 from django.views.generic.base import View, TemplateResponseMixin
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
@@ -15,6 +14,7 @@ from .forms import CommentForm
 from .utils import get_cache, set_cache
 
 r = settings.DEFAULT_REDIS_CLIENT
+CACHE_TIMEOUT = settings.DEFAULT_CACHE_TIMEOUT
 
 
 class ArticleListView(TemplateResponseMixin, View):
@@ -29,7 +29,8 @@ class ArticleListView(TemplateResponseMixin, View):
 		if topic_slug:
 			self.topic_slug = topic_slug
 			self.cache_key = f'article_list_page:{self.page}|topic:{self.topic_slug}'
-		self.cache_key = f'article_list_page:{self.page}'
+		else:
+			self.cache_key = f'article_list_page:{self.page}'
 		return super().dispatch(request, *args, **kwargs)
 
 	def get_queryset(self):
@@ -44,8 +45,8 @@ class ArticleListView(TemplateResponseMixin, View):
 		context = kwargs
 		qs = self.get_page()
 		context['articles'] = qs
-		context['paginator'] = qs.paginator
 		context['page_obj'] = qs
+		context['paginator'] = qs.paginator
 		return context
 
 	def get_page(self):
@@ -53,7 +54,7 @@ class ArticleListView(TemplateResponseMixin, View):
 		qs = get_cache(self.cache_key)
 		if not qs:
 			qs = paginator.get_page(self.page)
-			set_cache(key=self.cache_key, value=qs, time=10)
+			set_cache(key=self.cache_key, value=qs, time=CACHE_TIMEOUT)
 		return qs
 
 	def get_paginator(self):
@@ -67,7 +68,7 @@ class ArticleListView(TemplateResponseMixin, View):
 		return self.render_to_response(self.get_context_data())
 
 
-class ArticleCreateView(CreateView, PermissionRequiredMixin):
+class ArticleCreateView(PermissionRequiredMixin, CreateView):
 	model = Article
 	permission_required = ['articles.add_article']
 	fields = [
@@ -92,7 +93,7 @@ class ArticleDetailView(DetailView):
 		cache_result = cache.get(key)
 		if not cache_result or self.request.user.is_staff:
 			article = get_object_or_404(Article, slug=self.slug)
-			cache.set(key, article, 180)
+			cache.set(key, article, CACHE_TIMEOUT)
 			return article
 		return cache_result
 
@@ -122,7 +123,7 @@ class ArticleDetailView(DetailView):
 		return self.render_to_response(context)
 
 
-class ArticleEditView(UpdateView, PermissionRequiredMixin):
+class ArticleEditView(PermissionRequiredMixin, UpdateView):
 	permission_required = ['articles.edit_article']
 	model = Article  
 	template_name = 'articles/edit.html'
@@ -137,7 +138,7 @@ class ArticleEditView(UpdateView, PermissionRequiredMixin):
 		return article.get_absolute_url()
 
 
-class ArticleDeleteView(View, PermissionRequiredMixin):
+class ArticleDeleteView(PermissionRequiredMixin, View):
 	permission_required = ['articles.delete_article']	
 
 	def dispatch(self, request, pk, *args, **kwargs):
@@ -149,7 +150,7 @@ class ArticleDeleteView(View, PermissionRequiredMixin):
 		return redirect('articles:list')
 
 
-class CommentEditView(UpdateView, AuthorMixin):
+class CommentEditView(AuthorMixin, UpdateView):
 	model = Comment
 	fields = ['body']
 	template_name = 'comments/edit.html'

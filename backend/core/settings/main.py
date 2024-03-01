@@ -25,8 +25,8 @@ ALLOWED_HOSTS = []
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
-# Application definition
 
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -63,8 +63,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'core.urls'
 
-# Build base path to the template directory, so
-# it gives capability to write: template_name = 'app_name/file.html'
+# Build base path to the template directory
 BASE_TEMPLATE_DIR = BASE_FRONTEND_DIR / 'templates/'
 
 TEMPLATES = [
@@ -104,7 +103,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -121,7 +119,7 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+# Auth urls
 LOGIN_URL = 'users:login'
 LOGOUT_URL = 'users:logout'
 LOGIN_REDIRECT_URL = 'articles:list'
