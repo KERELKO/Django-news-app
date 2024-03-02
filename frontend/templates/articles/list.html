@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
+	<p>
+		<form action="{% url 'articles:search' %}" method="post">
+			<input type="text" name="query">
+		</form>
+	</p>
 	<a href="{% url 'api:news:topic-detail' 1 %}">api</a>
 	{% for article in articles %}
 		<ul>
