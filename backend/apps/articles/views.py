@@ -1,20 +1,49 @@
 from django.views.generic.base import View, TemplateResponseMixin
 from django.views.generic.edit import CreateView, UpdateView
-from django.views.generic.detail import DetailView
+from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.core.cache import cache
+from django.http import HttpResponse
 from django.core.paginator import Paginator
 from django.conf import settings
 from django.urls import reverse_lazy
+from django.contrib.postgres.search import SearchVector
 
 from .models import Article, Topic, Comment
 from .mixins import AuthorMixin
-from .forms import CommentForm
+from .forms import CommentForm, SearchForm
 from .utils import get_cache, set_cache
 
 r = settings.DEFAULT_REDIS_CLIENT
 CACHE_TIMEOUT = settings.DEFAULT_CACHE_TIMEOUT
+
+
+class ArticleSearchView(TemplateResponseMixin, View):
+	query = None  
+	template_name = 'articles/search.html'
+
+	def post(self, request):
+		query = None
+		form = SearchForm(request.POST)
+		if form.is_valid():
+			query = form.cleaned_data['query']
+			results = Article.active.annotate(
+				search=SearchVector('title', 'description'),
+			).filter(search=query)
+		context = {
+			'form': form,
+			'query': query, 
+			'results': results
+		}
+		return self.render_to_response(context)
+
+	def get(self, request):
+		form = SearchForm()
+		context = {
+			'form': form
+		}
+		return self.render_to_response(context)
 
 
 class ArticleListView(TemplateResponseMixin, View):
@@ -160,20 +189,16 @@ class CommentEditView(AuthorMixin, UpdateView):
 		return article.get_absolute_url()
 
 
-class CommentDeleteView(AuthorMixin, View):
-	object = None
-	pk = None
+class CommentDeleteView(AuthorMixin, SingleObjectMixin, View):
+	model = Comment
 
-	def get_object(self):
-		self.object = get_object_or_404(Comment, id=self.pk)
-		return self.object
+	def dispatch(self, request, *args, **kwargs):
+		response = super().dispatch(request, *args, **kwargs)
+		if isinstance(response, HttpResponse):
+			return response
+		return self.delete(request)
 
-	def dispatch(self, request, pk, *args, **kwargs):
-		self.pk = pk
-		super().dispatch(request, *args, **kwargs)
-		return self.delete(request, pk, *args, **kwargs)
-
-	def delete(self, request, pk, *args, **kwargs):
+	def delete(self, request):
 		comment = self.get_object()
 		article = comment.article
 		comment.delete()

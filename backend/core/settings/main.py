@@ -20,7 +20,7 @@ SECRET_KEY = 'django-insecure-a)6jhj959of)aumw)&j_a+v@9xqg=es#7=#^#b0g3&^jmqih0x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INTERNAL_IPS = [
     '127.0.0.1',
@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
     'apps.articles.apps.ArticlesConfig',
     'apps.content.apps.ContentConfig',
     'apps.users.apps.UsersConfig',

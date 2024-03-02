@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+	
+	<form action="{% url 'articles:search' %}" method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="search">
+	</form>
+	{% if query %}
+		{% for article in results %}
+	  <p>
+			<a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+	  </p>
+	  {% empty %}
+	  	<p>No articles with this query</p>
+		{% endfor %}
+	{% endif %}
+{% endblock %}

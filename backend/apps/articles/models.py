@@ -42,9 +42,6 @@ class Article(models.Model):
 	published = models.DateTimeField(
 		auto_now_add=True
 	)
-	# 'is_active' indicates that article 
-	# will be visible for users or not,
-	# False by default
 	is_active = models.BooleanField(
 		default=False
 	)

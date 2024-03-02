@@ -44,5 +44,6 @@ urlpatterns = [
 		'comment/edit/<pk>/',
 		views.CommentEditView.as_view(),
 		name='comment_edit',
-	)
+	),
+	path('search/', views.ArticleSearchView.as_view(), name='search'),
 ]
