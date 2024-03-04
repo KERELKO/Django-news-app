@@ -6,10 +6,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('users/', include('apps.users.urls', namespace='users')),
     path('api/', include('api.urls', namespace='api')),
     path('news/', include('apps.articles.urls', namespace='articles')),
     path('content/', include('apps.content.urls', namespace='content')),
-    path('users/', include('apps.users.urls', namespace='users')),
     path('__debug__/', include('debug_toolbar.urls')),
 ]
 

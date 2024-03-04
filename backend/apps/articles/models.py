@@ -3,7 +3,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils.text import slugify
 
-USER = settings.AUTH_USER_MODEL
+User = settings.AUTH_USER_MODEL
 
 
 class Topic(models.Model):
@@ -86,7 +86,7 @@ class Article(models.Model):
 
 class Comment(models.Model):
 	author = models.ForeignKey(
-		USER,
+		User,
 		on_delete=models.CASCADE,
 		related_name='comments'
 	)

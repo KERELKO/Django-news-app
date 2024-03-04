@@ -15,15 +15,15 @@ BASE_FRONTEND_DIR = BASE_DIR.parent / 'frontend/'
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-a)6jhj959of)aumw)&j_a+v@9xqg=es#7=#^#b0g3&^jmqih0x'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]
 
 INTERNAL_IPS = [
-    '127.0.0.1',
+    os.getenv('INTERNAL_IPS')
 ]
 
 # Application definition
@@ -35,9 +35,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.postgres',
+    'apps.users.apps.UsersConfig',
     'apps.articles.apps.ArticlesConfig',
     'apps.content.apps.ContentConfig',
-    'apps.users.apps.UsersConfig',
     'embed_video',
     'rest_framework',
     'debug_toolbar',
@@ -104,6 +104,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'users.CustomUser'
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -125,3 +127,6 @@ LOGIN_URL = 'users:login'
 LOGOUT_URL = 'users:logout'
 LOGIN_REDIRECT_URL = 'articles:list'
 LOGOUT_REDIRECT_URL = 'articles:list'
+
+# Cache
+DEFAULT_CACHE_TIMEOUT = 5 * 60

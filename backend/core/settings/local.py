@@ -7,6 +7,8 @@ DEBUG = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+ALLOWED_HOSTS = ['*']
+
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_FRONTEND_DIR / 'static/'
 
@@ -25,8 +27,7 @@ DATABASES = {
     }
 }
 
-DEFAULT_CACHE_TIMEOUT = 5 * 60
-
+# Cache
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
@@ -36,7 +37,7 @@ CACHES = {
     }
 }
 
-AUTH_PASSWORD_VALIDATORS = []
+DEFAULT_CACHE_TIMEOUT = 1 * 60
 
 REDIS_HOST = 'localhost'
 REDIS_DB = 1 
@@ -47,3 +48,9 @@ DEFAULT_REDIS_CLIENT = redis.Redis(
     port=REDIS_PORT,
     db=REDIS_DB
 )
+
+AUTH_PASSWORD_VALIDATORS = []
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+CELERY_ENV = 'core.settings.local'

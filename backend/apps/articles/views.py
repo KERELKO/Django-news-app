@@ -14,6 +14,7 @@ from .models import Article, Topic, Comment
 from .mixins import AuthorMixin
 from .forms import CommentForm, SearchForm
 from .utils import get_cache, set_cache
+from .tasks import article_published
 
 r = settings.DEFAULT_REDIS_CLIENT
 CACHE_TIMEOUT = settings.DEFAULT_CACHE_TIMEOUT
@@ -107,6 +108,12 @@ class ArticleCreateView(PermissionRequiredMixin, CreateView):
 	template_name = 'articles/create.html'
 	success_url = reverse_lazy('articles:list')
 
+	def form_valid(self, form):
+		form = super().form_valid(form)
+		if self.object.is_active:
+			article_published.delay(self.object.pk)
+		return form
+
 
 class ArticleDetailView(DetailView):
 	slug = None
@@ -165,6 +172,12 @@ class ArticleEditView(PermissionRequiredMixin, UpdateView):
 	def get_success_url(self):
 		article = self.object
 		return article.get_absolute_url()
+
+	def form_valid(self, form):
+		form = super().form_valid(form)
+		if self.object.is_active:
+			article_published.delay(self.object.pk)
+		return form
 
 
 class ArticleDeleteView(PermissionRequiredMixin, View):
