@@ -12,17 +12,27 @@ class UserLoginView(LoginView):
 
 class UserLogout(LoginRequiredMixin, View):
     
-    def get(self, request):
+    def dispatch(self, request, *args, **kwargs):
+    	if request.method == 'GET':
+    		request.method = 'POST'
+    	else:
+    		raise NotImplementedError
+    	return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request):
         logout(request)
         return redirect('articles:list')
 
 
-class RegistrationView(View, TemplateResponseMixin):
+class RegistrationView(TemplateResponseMixin, View):
 	template_name = 'users/registration.html'
 
 	def get(self, request):
 		form = RegistrationForm()
-		return self.render_to_response({'form': form})
+		context = {
+			'form': form
+		}
+		return self.render_to_response(context)
 
 	def post(self, request):
 		form = RegistrationForm(data=request.POST)
@@ -32,4 +42,7 @@ class RegistrationView(View, TemplateResponseMixin):
 			user.save()
 			login(request, user)
 			return redirect('articles:list')
-		return self.render_to_response({'form': form})
+		context = {
+			'form': form
+		}
+		return self.render_to_response(context)

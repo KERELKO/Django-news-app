@@ -10,6 +10,12 @@ class Topic(models.Model):
 	name = models.CharField(max_length=100)
 	slug = models.SlugField(blank=True, null=False)
 
+	class Meta:
+		ordering = ['name']
+		indexes = [
+			models.Index(fields=['slug']),
+		]
+
 	def save(self, *args, **kwargs):
 		if not self.slug:
 			self.slug = slugify(self.name)
@@ -21,7 +27,7 @@ class Topic(models.Model):
 
 class ActiveManager(models.Manager):
 	"""
-	Return queryset where all articles 'is_active' field is True
+	Return queryset where all articles 'is_active' field is True,
 	field 'is_active' in Article model indicates visibility for users
 	"""
 	def get_queryset(self):
@@ -88,7 +94,7 @@ class Comment(models.Model):
 	author = models.ForeignKey(
 		User,
 		on_delete=models.CASCADE,
-		related_name='comments'
+		related_name='written_comments'
 	)
 	article = models.ForeignKey(
 		Article,

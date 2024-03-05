@@ -49,7 +49,7 @@ class ArticleSearchView(TemplateResponseMixin, View):
 
 class ArticleListView(TemplateResponseMixin, View):
 	topic_slug = None 
-	paginate_by = 2
+	paginate_by = 10
 	cache_key = None
 	page = 1
 	template_name = 'articles/list.html'
@@ -64,7 +64,7 @@ class ArticleListView(TemplateResponseMixin, View):
 		return super().dispatch(request, *args, **kwargs)
 
 	def get_queryset(self):
-		if self.topic_slug:
+		if self.topic_slug is not None:
 			topic = get_object_or_404(Topic, slug=self.topic_slug)
 			queryset = Article.active.filter(topic=topic)
 		else:
@@ -102,8 +102,11 @@ class ArticleCreateView(PermissionRequiredMixin, CreateView):
 	model = Article
 	permission_required = ['articles.add_article']
 	fields = [
-		'title', 'description',
-		'topic', 'is_active', 'source',
+		'title', 
+		'description',
+		'topic', 
+		'is_active', 
+		'source',
 	]
 	template_name = 'articles/create.html'
 	success_url = reverse_lazy('articles:list')
@@ -161,13 +164,20 @@ class ArticleDetailView(DetailView):
 
 class ArticleEditView(PermissionRequiredMixin, UpdateView):
 	permission_required = ['articles.edit_article']
+	is_active = None
 	model = Article  
 	template_name = 'articles/edit.html'
 	fields = [
-		'title', 'description',
-		'is_active', 'topic', 
+		'title', 
+		'description',
+		'is_active', 
+		'topic', 
 		'source',
 	]
+
+	def dispatch(self, request, *args, **kwargs):
+		self.is_active = self.get_object().is_active
+		return super().dispatch(request, args, **kwargs)
 
 	def get_success_url(self):
 		article = self.object
@@ -175,7 +185,7 @@ class ArticleEditView(PermissionRequiredMixin, UpdateView):
 
 	def form_valid(self, form):
 		form = super().form_valid(form)
-		if self.object.is_active:
+		if self.is_active:
 			article_published.delay(self.object.pk)
 		return form
 

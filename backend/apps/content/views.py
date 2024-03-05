@@ -1,13 +1,19 @@
 from django.views.generic.base import View, TemplateResponseMixin
 from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from apps.articles.models import Article
 from .models import Content 
 from .utils import get_form, get_model
 
 
-class CreateContentView(View, TemplateResponseMixin):
+class CreateContentView(
+	PermissionRequiredMixin, 
+	TemplateResponseMixin, 
+	View
+):
 	template_name = 'content/create.html'
+	permission_required = ['content.create_content']
 
 	def get(self, request, article_id, model_name):
 		model = get_model(model_name)
@@ -34,8 +40,13 @@ class CreateContentView(View, TemplateResponseMixin):
 		return self.render_to_response(context)
 
 
-class EditContentView(View, TemplateResponseMixin):
+class EditContentView(
+	PermissionRequiredMixin,
+	TemplateResponseMixin, 
+	View
+):
 	template_name = 'content/edit.html'
+	permission_required = ['content.edit_content']
 
 	def get(self, request, article_id, model_name, content_id):
 		model = get_model(model_name)
@@ -67,10 +78,13 @@ class EditContentView(View, TemplateResponseMixin):
 		return self.render_to_response(context)
 
 
-class DeleteContentView(View):
-	
-	def dispatch(self, *args, **kwargs):
-		return self.delete(*args, **kwargs)
+class DeleteContentView(PermissionRequiredMixin, View):
+	permission_required = ['content.delete_content']
+
+	def dispatch(self, request, *args, **kwargs):
+		if request.method in ['GET', 'POST']:
+			request.method = 'DELETE'
+		return super().dispatch(request, *args, **kwargs)
 
 	def delete(self, request, article_id, content_id):
 		item = get_object_or_404(Content, id=content_id)
