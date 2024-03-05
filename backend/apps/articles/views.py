@@ -54,7 +54,7 @@ class ArticleListView(TemplateResponseMixin, View):
 	page = 1
 	template_name = 'articles/list.html'
 
-	def dispatch(self, request, topic_slug=None, *args, **kwargs):
+	def dispatch(self, request, *args, topic_slug=None, **kwargs):
 		self.page = request.GET.get('page')
 		if topic_slug:
 			self.topic_slug = topic_slug
