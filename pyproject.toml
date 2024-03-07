@@ -24,6 +24,7 @@ python-dotenv = "^1.0.1"
 django-debug-toolbar = "^4.3.0"
 redis = "^5.0.1"
 psycopg2-binary = "^2.9.9"
+celery = "^5.3.6"
 
 
 [build-system]

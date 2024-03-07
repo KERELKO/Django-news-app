@@ -15,19 +15,24 @@ BASE_FRONTEND_DIR = BASE_DIR.parent / 'frontend/'
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = "django-insecure-a)6jhj959of)aumw)&j_a+v@9xqg=es#7=#^#b0g3&^jmqih0x"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]
-
 INTERNAL_IPS = [
-    os.getenv('INTERNAL_IPS')
+    "127.0.0.1"
 ]
+
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_FRONTEND_DIR / 'static/'
+
+MEDIA_URL = 'images/'
+MEDIA_ROOT = STATIC_ROOT / 'images'
 
 # Application definition
 INSTALLED_APPS = [
+    'apps.users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -35,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.postgres',
-    'apps.users.apps.UsersConfig',
     'apps.articles.apps.ArticlesConfig',
     'apps.content.apps.ContentConfig',
     'embed_video',

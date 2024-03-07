@@ -12,21 +12,28 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
+  cache:
+    image: redis:latest
+    restart: always
+    volumes:
+      - ./data/cache:/data
+
   web:
     build: .
-    working_dir: /code/backend
-    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: python /code/backend/manage.py runserver 0.0.0.0:8000
     restart: always
     volumes:
       - .:/code
     ports:
-      - 8000:8000
+      - "8000:8000"
     environment:
       - DJANGO_SETTINGS_MODULE=core.settings.prod
       - POSTGRES_DB=postgres  
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - TIME_ZONE=Europe/Kiev
+      - ALLOWED_HOSTS=news.com,
       - LANGUAGE_CODE=uk
     depends_on:
       - db
+      - cache

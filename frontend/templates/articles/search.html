@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-	
 	<form action="{% url 'articles:search' %}" method="post">
 		{% csrf_token %}
 		{{ form.as_p }}
@@ -13,7 +12,7 @@
 			<a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
 	  </p>
 	  {% empty %}
-	  	<p>No articles with this query</p>
+	  	<p>No articles contaning "{{ query }}"</p>
 		{% endfor %}
 	{% endif %}
 {% endblock %}

@@ -1,6 +1,3 @@
-{% load cache %}
-{% load redis_tags %}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,8 +14,5 @@
 	{% endif %}
 	{% block content %}
 	{% endblock %}
-	{% cache 60 most_viewed_articles %}	
-		{% most_viewed_articles 10 %}
-	{% endcache %}
 </body>
 </html>
