@@ -18,12 +18,6 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
-  cache:
-    image: redis:latest
-    restart: always
-    volumes:
-      - ./data/cache:/data
-
   web:
     build: .
     command: python backend/manage.py runserver 0.0.0:8000
