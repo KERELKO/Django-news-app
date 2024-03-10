@@ -3,11 +3,13 @@ import redis
 from .main import *
 
 
-DEBUG = False
+DEBUG = True
 
 ADMINS = [
 	('Kyryl Barabash', 'kerelkobarabash@gmail.com'),
 ]
+
+ALLOWED_HOSTS = ['*']
 
 DATABASES = {
     'default': {

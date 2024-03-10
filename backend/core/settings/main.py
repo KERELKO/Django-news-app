@@ -25,6 +25,12 @@ INTERNAL_IPS = [
     '127.0.0.1'
 ]
 
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_FRONTEND_DIR / 'static/'
+
+MEDIA_URL = 'images/'
+MEDIA_ROOT = STATIC_ROOT / 'images'
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
