@@ -1,4 +1,5 @@
 class IncorrectModelNameError(ValueError):
+	"""Custom exception, raise if name of the model is incorrect"""
 	def __init__(
 		self, 
 		model_name: str, 

@@ -12,6 +12,7 @@ def get_form(
 	instance: Optional['ModelForm'] = None,
 	files: dict['str', Type['UploadedFile']] = None,
 ) -> Type['Form']:
+	"""Function to get form for the model"""
 	form_class = modelform_factory(
 		model=model,
 		fields='__all__'
@@ -20,6 +21,11 @@ def get_form(
 
 
 def get_model(model_name: str) -> Optional[Type['Model']]:
+	"""
+	Function to get model that appears in 'ALLOWED_MODELS'
+	and related to 'content' app, 
+	if name of the model is incorret raises 'IncorrectModelNameError'
+	"""
 	model = None
 	if model_name.lower() in ALLOWED_MODELS:
 		model = apps.get_model(

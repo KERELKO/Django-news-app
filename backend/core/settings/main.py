@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -15,15 +14,15 @@ BASE_FRONTEND_DIR = BASE_DIR.parent / 'frontend/'
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'django-insecure-a)6jhj959of)aumw)&j_a+v@9xqg=es#7=#^#b0g3&^jmqih0x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]
+ALLOWED_HOSTS = ['*']
 
 INTERNAL_IPS = [
-    os.getenv('INTERNAL_IPS')
+    '127.0.0.1'
 ]
 
 # Application definition
@@ -109,9 +108,9 @@ AUTH_USER_MODEL = 'users.CustomUser'
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = os.getenv('LANGUAGE_CODE')
+LANGUAGE_CODE = 'uk'
 
-TIME_ZONE = os.getenv('TIME_ZONE')
+TIME_ZONE = 'Europe/Kiev'
 
 USE_I18N = True
 
@@ -129,4 +128,13 @@ LOGIN_REDIRECT_URL = 'articles:list'
 LOGOUT_REDIRECT_URL = 'articles:list'
 
 # Cache
-DEFAULT_CACHE_TIMEOUT = 5 * 60
+DEFAULT_CACHE_TIMEOUT = 5 * 60  # 5 minutes
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': [
+            'redis://127.0.0.1:6379',  
+        ],
+    }
+}

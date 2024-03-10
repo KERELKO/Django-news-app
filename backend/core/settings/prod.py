@@ -21,23 +21,12 @@ DATABASES = {
 }
 
 # Cache
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': [
-            os.getenv('REDIS_LOCATION'),  
-        ],
-    }
-}
-
-REDIS_HOST = os.getenv('REDIS_HOST')
-REDIS_DB = os.getenv('REDIS_DB')
-REDIS_PORT = os.getenv('REDIS_PORT')
+REDIS_URL = 'redis://cache:6379'
 
 DEFAULT_REDIS_CLIENT = redis.Redis(
-    host=REDIS_HOST,
-    port=REDIS_PORT,
-    db=REDIS_DB
+    host='cache',
+    port=6379,
+    db=1,
 )
 
-CELERY_ENV = 'core.settings.prod'
+CACHES['default']['LOCATION'] = REDIS_URL
