@@ -6,7 +6,7 @@ services:
     image: redis:latest
     restart: always
     volumes:
-      - .data/cache/:/cache/data
+      - ./data/cache:/data/
 
   db:
     image: postgres:14.5
