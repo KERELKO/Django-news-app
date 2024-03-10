@@ -1,7 +1,13 @@
 version: '3.7'
 
 services:
-  
+
+  cache:
+    image: redis:latest
+    restart: always
+    volumes:
+      - .data/cache/:/cache/data
+
   db:
     image: postgres:14.5
     restart: always
@@ -20,20 +26,32 @@ services:
 
   web:
     build: .
+<<<<<<< HEAD
     command: python /code/backend/manage.py runserver 0.0.0.0:8000
+=======
+    command: python backend/manage.py runserver 0.0.0:8000
+>>>>>>> refactoring
     restart: always
+    ports:
+      - "8000:8000" 
     volumes:
       - .:/code
+<<<<<<< HEAD
     ports:
       - "8000:8000"
+=======
+>>>>>>> refactoring
     environment:
       - DJANGO_SETTINGS_MODULE=core.settings.prod
       - POSTGRES_DB=postgres  
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+<<<<<<< HEAD
       - TIME_ZONE=Europe/Kiev
       - ALLOWED_HOSTS=news.com,
       - LANGUAGE_CODE=uk
+=======
+>>>>>>> refactoring
     depends_on:
       - db
       - cache

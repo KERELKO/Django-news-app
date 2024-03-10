@@ -81,12 +81,7 @@ class EditContentView(
 class DeleteContentView(PermissionRequiredMixin, View):
 	permission_required = ['content.delete_content']
 
-	def dispatch(self, request, *args, **kwargs):
-		if request.method in ['GET', 'POST']:
-			request.method = 'DELETE'
-		return super().dispatch(request, *args, **kwargs)
-
-	def delete(self, request, article_id, content_id):
+	def post(self, request, article_id, content_id):
 		item = get_object_or_404(Content, id=content_id)
 		article = get_object_or_404(Article, id=article_id)
 		item.content.delete()

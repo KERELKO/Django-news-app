@@ -12,13 +12,6 @@ class UserLoginView(LoginView):
 
 class UserLogout(LoginRequiredMixin, View):
     
-    def dispatch(self, request, *args, **kwargs):
-    	if request.method == 'GET':
-    		request.method = 'POST'
-    	else:
-    		raise NotImplementedError
-    	return super().dispatch(request, *args, **kwargs)
-
     def post(self, request):
         logout(request)
         return redirect('articles:list')

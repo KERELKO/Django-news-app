@@ -22,22 +22,13 @@ DATABASES = {
     }
 }
 
+# Cache
 REDIS_URL = 'redis://cache:6379'
 
-# Cache
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': [REDIS_URL],
-    }
-}
-
-REDIS_HOST = 'cache'
-REDIS_DB = 1 
-REDIS_PORT = 6379
-
 DEFAULT_REDIS_CLIENT = redis.Redis(
-    host=REDIS_HOST,
-    port=REDIS_PORT,
-    db=REDIS_DB
+    host='cache',
+    port=6379,
+    db=1,
 )
+
+CACHES['default']['LOCATION'] = REDIS_URL

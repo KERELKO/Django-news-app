@@ -18,4 +18,5 @@ def article_published(article_id: int) -> send_mail:
 	recipent_list = []
 	for user in users:
 		recipent_list.append(user.email)
+	print('email sent')
 	return send_mail(subject, message, 'admin@news.com', recipent_list)

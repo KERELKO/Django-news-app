@@ -9,12 +9,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_FRONTEND_DIR / 'static/'
-
-MEDIA_URL = 'images/'
-MEDIA_ROOT = STATIC_ROOT / 'images'
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -28,17 +22,9 @@ DATABASES = {
 }
 
 # Cache
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': [
-            'redis://127.0.0.1:6379',  # leader
-        ],
-    }
-}
-
 DEFAULT_CACHE_TIMEOUT = 1 * 60
 
+# Redis
 REDIS_HOST = 'localhost'
 REDIS_DB = 1 
 REDIS_PORT = 6379
