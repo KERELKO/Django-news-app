@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 
-from apps.articles.models import Article, Topic
+from backend.apps.articles.models import Article, Topic
 from . import serializers
 
 

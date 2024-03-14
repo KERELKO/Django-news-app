@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.template.loader import render_to_string
 
-from apps.articles.models import Article
+from backend.apps.articles.models import Article
 
 
 class Content(models.Model):

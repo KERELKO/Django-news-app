@@ -20,14 +20,14 @@ services:
 
   web:
     build: .
-    command: python backend/manage.py runserver 0.0.0:8000
+    command: python manage.py runserver 0.0.0:8000
     restart: always
     ports:
       - "8000:8000" 
     volumes:
       - .:/code
     environment:
-      - DJANGO_SETTINGS_MODULE=core.settings.prod
+      - DJANGO_SETTINGS_MODULE=backend.core.settings.prod
       - POSTGRES_DB=postgres  
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

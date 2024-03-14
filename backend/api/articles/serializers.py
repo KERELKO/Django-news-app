@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from api.content.serializers import ContentSerializer
-from apps.articles.models import Article, Topic
+from backend.api.content.serializers import ContentSerializer
+from backend.apps.articles.models import Article, Topic
 
 
 class TopicSerializer(serializers.ModelSerializer):

@@ -2,7 +2,7 @@ from django.views.generic.base import View, TemplateResponseMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
-from apps.articles.models import Article
+from backend.apps.articles.models import Article
 from .models import Content 
 from .utils import get_form, get_model
 
