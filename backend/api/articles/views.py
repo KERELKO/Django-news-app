@@ -12,9 +12,18 @@ class TopicViewSet(viewsets.ModelViewSet):
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
-	queryset = Article.objects.all()
+	queryset = Article.objects.select_related('topic').all()
 	serializer_class = serializers.ArticleSerializer
-	
+    
+	def get_queryset(self):
+		queryset = super().get_queryset()
+		# You can modify queryset based on action name
+		if self.action == 'hyperlinked_with_content':
+			queryset = Article.objects.select_related(
+				'topic'
+			).prefetch_related('content', 'comments').all()
+		return queryset
+		
 	# HyperLinked Serializors
 	@action(
 		methods=['get', 'post'],

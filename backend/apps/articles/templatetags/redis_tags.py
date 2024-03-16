@@ -7,12 +7,12 @@ r = settings.DEFAULT_REDIS_CLIENT
 
 
 @register.inclusion_tag('articles/most_viewed_articles.html')
-def most_viewed_articles(count: int) -> dict:
+def most_viewed_articles(limit: int = 10) -> dict[str, list[Article]]:
 	"""A function to get a list of the most-viewed articles using Redis"""
 	
 	# Get article IDs from the sorted set 'article_ranking'
 	# in descending order (from highest to lowest score)
-	article_ranking = r.zrange('article_ranking', 0, -1, desc=True)[:count]
+	article_ranking = r.zrange('article_ranking', 0, -1, desc=True)[:limit]
 	
 	# Convert article IDs from bytes to integers and store them in a list
 	article_ranking_ids = [int(id) for id in article_ranking]

@@ -22,7 +22,7 @@ DATABASES = {
 }
 
 # Cache
-DEFAULT_CACHE_TIMEOUT = 1 * 60
+DEFAULT_CACHE_TIMEOUT = 1 * 15
 
 # Redis
 REDIS_HOST = 'localhost'
@@ -39,4 +39,4 @@ AUTH_PASSWORD_VALIDATORS = []
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-CELERY_ENV = 'core.settings.local'
+CELERY_ENV = 'backend.core.setting.local'

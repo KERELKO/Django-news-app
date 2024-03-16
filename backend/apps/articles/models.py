@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 User = settings.AUTH_USER_MODEL
+r = settings.DEFAULT_REDIS_CLIENT
 
 
 class Topic(models.Model):
@@ -69,6 +70,9 @@ class Article(models.Model):
 			models.Index(fields=['slug']),
 			models.Index(fields=['topic']),
 		]
+	
+	def __str__(self):
+		return self.title 
 
 	def save(self, *args, **kwargs):
 		if not self.slug:
@@ -86,8 +90,13 @@ class Article(models.Model):
 			]
 		)
 
-	def __str__(self):
-		return self.title 
+	def get_and_increase_views(self) -> int:
+		views = r.incr(f'article:{self.id}:views') 
+		self.increase_rating()
+		return views
+
+	def increase_rating(self) -> None:
+		r.zincrby('article_ranking', 1, self.id)
 
 
 class Comment(models.Model):

@@ -2,22 +2,21 @@ from django.views.generic.base import View, TemplateResponseMixin
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.postgres.search import SearchVector
 from django.shortcuts import get_object_or_404, redirect
 from django.core.cache import cache
-from django.http import HttpResponse
 from django.core.paginator import Paginator
+from django.http import HttpResponse
 from django.conf import settings
 from django.urls import reverse_lazy
-from django.contrib.postgres.search import SearchVector
 
-from .models import Article, Topic, Comment
+from .models import Article, Comment
 from .mixins import AuthorMixin
 from .forms import CommentForm, SearchForm
 from .utils import get_cache, set_cache
 from .tasks import article_published
 
 r = settings.DEFAULT_REDIS_CLIENT
-CACHE_TIMEOUT = settings.DEFAULT_CACHE_TIMEOUT
 
 
 class ArticleSearchView(TemplateResponseMixin, View):
@@ -26,6 +25,7 @@ class ArticleSearchView(TemplateResponseMixin, View):
 
 	def post(self, request):
 		query = None
+		results = None
 		form = SearchForm(request.POST)
 		if form.is_valid():
 			query = form.cleaned_data['query']
@@ -65,10 +65,11 @@ class ArticleListView(TemplateResponseMixin, View):
 
 	def get_queryset(self):
 		if self.topic_slug is not None:
-			topic = get_object_or_404(Topic, slug=self.topic_slug)
-			queryset = Article.active.filter(topic=topic)
+			queryset = Article.active.prefetch_related(
+				'topic'
+			).filter(topic__slug=self.topic_slug)
 		else:
-			queryset = Article.active.all()
+			queryset = Article.active.select_related('topic').all()
 		return queryset
 
 	def get_context_data(self, **kwargs):
@@ -84,7 +85,7 @@ class ArticleListView(TemplateResponseMixin, View):
 		qs = get_cache(self.cache_key)
 		if not qs:
 			qs = paginator.get_page(self.page)
-			set_cache(key=self.cache_key, value=qs, time=CACHE_TIMEOUT)
+			set_cache(key=self.cache_key, value=qs)
 		return qs
 
 	def get_paginator(self):
@@ -123,33 +124,36 @@ class ArticleDetailView(DetailView):
 	context_object_name = 'article'
 	template_name = 'articles/detail.html'
 
-	def dispatch(self, request, slug, *args, **kwargs):
-		self.slug = slug  
-		return super().dispatch(request, slug, *args, **kwargs)
+	def dispatch(self, request, *args, **kwargs):
+		self.slug = kwargs.get('slug', None)
+		return super().dispatch(request, *args, **kwargs)
 
 	def get_object(self, queryset=None):
 		key = f'article:{self.slug}'
 		cache_result = cache.get(key)
 		if not cache_result or self.request.user.is_staff:
-			article = get_object_or_404(Article, slug=self.slug)
-			cache.set(key, article, CACHE_TIMEOUT)
+			article = Article.objects.select_related(
+				'topic'
+			).prefetch_related('comments', 'content').get(slug=self.slug)
+			set_cache(key=key, value=article)
 			return article
 		return cache_result
 
 	def get_context_data(self, **kwargs):
-		article = self.get_object()
-		# increase views of the article by 1
-		views = r.incr(f'article:{article.id}:views')
-		# add this article to the sorted set of elements, 
-		# if it doesn't exist, or increase its rating by 1
-		r.zincrby('article_ranking', 1, article.id)
-		context = super().get_context_data(**kwargs)
+		context = {}
 		form = CommentForm()
 		context['form'] = form  
-		context['views'] = views
 		return context
 
-	def post(self, request, slug, *args, **kwargs):
+	def get(self, request, *args, **kwargs):
+		article = self.get_object()
+		views = article.get_and_increase_views()
+		context = self.get_context_data(**kwargs)
+		context['views'] = views
+		context['article'] = article
+		return self.render_to_response(context)
+
+	def post(self, request, *args, **kwargs):
 		article = self.get_object()
 		form = CommentForm(data=request.POST)
 		if form.is_valid():
