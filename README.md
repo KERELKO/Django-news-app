@@ -2,9 +2,9 @@
 
 ## The Django News App offers a range of features to deliver and interact with news content. Here are some of its main functionalities:
 - Watching news
-- Create news
-- Add comments to the news
-- Search for the news
+- Create articles
+- Add comments to articles
+- Search for news
 - Pick interesting topics
 - Follow for the most popular news
 
@@ -28,7 +28,7 @@ You can install project with
 `git clone https://github.com/KERELKO/Django-news-app`  
 To use all features of the project you can use docker compose  
 `docker compose up`  
-If you are using docker compose, then project works in production mode, where DEBUG=False,   
+If you use docker compose, then project works in production mode, where DEBUG=False,   
 if you want to change it, you can do it directly in settings.prod or in docker-compose.yaml  
 
 ## About improvements
