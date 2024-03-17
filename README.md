@@ -23,7 +23,7 @@ Furthermore, the app offers the flexibility to create diverse content formats fo
 5. [Celery](https://docs.celeryq.dev/en/stable/)
 6. [DRF](https://www.django-rest-framework.org/)
 
-## How to install
+## How to use
 You can install project with  
 `git clone https://github.com/KERELKO/Django-news-app`  
 To use all features of the project you can use docker compose  
