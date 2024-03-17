@@ -27,9 +27,11 @@ Furthermore, the app offers the flexibility to create diverse content formats fo
 You can install project with  
 `git clone https://github.com/KERELKO/Django-news-app`  
 To use all features of the project you can use docker compose  
-`docker compose up`  
-If you use docker compose, then project works in production mode, where DEBUG=False,   
-if you want to change it, you can do it directly in settings.prod or in docker-compose.yaml  
+`docker compose up` 
+
+> [!NOTE]
+> If you use docker compose, then project works in production mode, where DEBUG=False,  
+> if you want to change it, you can do it directly in settings.prod or in docker-compose.yaml  
 
 ## About improvements
 The main aspect that can be improved in this project is the frontend.  
