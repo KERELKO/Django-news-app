@@ -15,7 +15,7 @@ Celery facilitates asynchronous task execution, enabling users to receive notifi
 The Django Rest Framework empowers the app with a robust API, which can be easily tested using the [requests](https://requests.readthedocs.io/en/latest/) library.    
 Furthermore, the app offers the flexibility to create diverse content formats for news articles, including videos, text, and images.    
 
-## Technologies used in project
+## Technologies 
 1. [Django](https://www.djangoproject.com/)
 2. [Postgresql](https://www.postgresql.org/)
 3. [Docker](https://www.docker.com/)
