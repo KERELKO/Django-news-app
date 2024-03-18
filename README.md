@@ -1,3 +1,4 @@
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 # Django News App
 
 ## The Django News App offers a range of features to deliver and interact with news content. Here are some of its main functionalities:
