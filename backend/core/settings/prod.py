@@ -6,7 +6,7 @@ from .main import *
 DEBUG = False
 
 ADMINS = [
-	('Kyryl Barabash', 'kerelkobarabash@gmail.com'),
+    ('Kyryl Barabash', 'kerelkobarabash@gmail.com'),
 ]
 
 ALLOWED_HOSTS = ['*']

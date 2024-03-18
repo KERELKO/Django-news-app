@@ -1,10 +1,5 @@
 from django.contrib import admin
-from .models import(
-	Content, 
-	Text, 
-	Video, 
-	Image
-)
+from .models import Content, Text, Video, Image
 
 
 admin.site.register(Content)

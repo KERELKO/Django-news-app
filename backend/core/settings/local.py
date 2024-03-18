@@ -1,5 +1,5 @@
 import redis
-from .main import * 
+from .main import *
 
 
 DEBUG = True
@@ -26,14 +26,10 @@ DEFAULT_CACHE_TIMEOUT = 1 * 15
 
 # Redis
 REDIS_HOST = 'localhost'
-REDIS_DB = 1 
+REDIS_DB = 1
 REDIS_PORT = 6379
 
-DEFAULT_REDIS_CLIENT = redis.Redis(
-    host=REDIS_HOST,
-    port=REDIS_PORT,
-    db=REDIS_DB
-)
+DEFAULT_REDIS_CLIENT = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
 AUTH_PASSWORD_VALIDATORS = []
 

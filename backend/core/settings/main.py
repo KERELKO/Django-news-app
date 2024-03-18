@@ -7,7 +7,7 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# Build base path to the frontend directory 
+# Build base path to the frontend directory
 BASE_FRONTEND_DIR = BASE_DIR.parent / 'frontend/'
 
 # Quick-start development settings - unsuitable for production
@@ -37,11 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.postgres',
-   
     'embed_video',
     'rest_framework',
     'debug_toolbar',
-    
     'backend.apps.users.apps.UsersConfig',
     'backend.apps.articles.apps.ArticlesConfig',
     'backend.apps.content.apps.ContentConfig',
@@ -139,7 +137,7 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
         'LOCATION': [
-            'redis://127.0.0.1:6379',  
+            'redis://127.0.0.1:6379',
         ],
     }
 }
