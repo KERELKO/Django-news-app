@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "news app"
 version = "0.1.0"
-description = "News app where users can observe different news, choose topics, and track the most popular news or the most interesting news. This app uses Redis, a powerful API, Celery, and a lot of other stuff."
+description = "News app where users can watching different articles, choose topics, and track the most popular articles or the most interesting news articles. This app uses Redis, DRF, Celery, and a lot of other"
 authors = ["Kerelko Barabash <kerelkobarabash@gmail.com>"]
 license = "MIT"
 readme = "README.md"
@@ -26,7 +26,10 @@ redis = "^5.0.1"
 psycopg2-binary = "^2.9.9"
 celery = "^5.3.6"
 
+[tool.black]
+skip-string-normalization = true
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
