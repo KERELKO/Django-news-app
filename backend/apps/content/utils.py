@@ -25,6 +25,8 @@ def get_model(model_name: str) -> Optional[Type['Model']]:
     """
     model = None
     if model_name.lower() in ALLOWED_MODELS:
-        model = apps.get_model(app_label='content', model_name=model_name.lower())
+        model = apps.get_model(
+            app_label='content', model_name=model_name.lower()
+        )
         return model
     raise IncorrectModelNameError(model_name, ALLOWED_MODELS)

@@ -8,7 +8,9 @@ from backend.apps.articles.models import Article
 
 class Content(models.Model):
     article = models.ForeignKey(
-        Article, related_name='content', on_delete=models.CASCADE
+        Article,
+        related_name='content',
+        on_delete=models.CASCADE,
     )
     content_type = models.ForeignKey(
         ContentType,
@@ -32,7 +34,10 @@ class Item(models.Model):
         abstract = True
 
     def render(self):
-        return render_to_string(f'content/{self._meta.model_name}.html', {'item': self})
+        return render_to_string(
+            f'content/{self._meta.model_name}.html',
+            {'item': self},
+        )
 
 
 class Text(Item):

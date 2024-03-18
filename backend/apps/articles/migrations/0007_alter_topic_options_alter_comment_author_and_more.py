@@ -28,6 +28,8 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name='topic',
-            index=models.Index(fields=['slug'], name='articles_to_slug_d8c928_idx'),
+            index=models.Index(
+                fields=['slug'], name='articles_to_slug_d8c928_idx'
+            ),
         ),
     ]

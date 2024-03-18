@@ -52,7 +52,9 @@ class ArticleListView(TemplateResponseMixin, View):
         self.page = request.GET.get('page')
         if topic_slug:
             self.topic_slug = topic_slug
-            self.cache_key = f'article_list_page:{self.page}|topic:{self.topic_slug}'
+            self.cache_key = (
+                f'article_list_page:{self.page}|topic:{self.topic_slug}'
+            )
         else:
             self.cache_key = f'article_list_page:{self.page}'
         return super().dispatch(request, *args, **kwargs)

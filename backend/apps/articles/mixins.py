@@ -8,6 +8,9 @@ class AuthorMixin:
     """
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user != self.get_object().author and not request.user.is_staff:
+        if (
+            request.user != self.get_object().author
+            and not request.user.is_staff
+        ):
             return HttpResponse('You don\'t have permissions')
         return super().dispatch(request, *args, **kwargs)

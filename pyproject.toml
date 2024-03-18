@@ -28,6 +28,7 @@ celery = "^5.3.6"
 
 [tool.black]
 skip-string-normalization = true
+line-length = 79
 
 [build-system]
 requires = ["poetry-core"]

@@ -17,6 +17,8 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name='article',
-            index=models.Index(fields=['topic'], name='articles_ar_topic_i_6def1c_idx'),
+            index=models.Index(
+                fields=['topic'], name='articles_ar_topic_i_6def1c_idx'
+            ),
         ),
     ]

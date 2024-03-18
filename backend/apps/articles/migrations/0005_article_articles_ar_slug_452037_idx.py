@@ -12,6 +12,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddIndex(
             model_name='article',
-            index=models.Index(fields=['slug'], name='articles_ar_slug_452037_idx'),
+            index=models.Index(
+                fields=['slug'], name='articles_ar_slug_452037_idx'
+            ),
         ),
     ]

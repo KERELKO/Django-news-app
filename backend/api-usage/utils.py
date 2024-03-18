@@ -1,9 +1,7 @@
-from typing import Type
-
 import requests
 
 
-def get_response_or_error(url: str, timeout=5, **kwargs) -> Type['Response']:
+def get_response_or_error(url: str, timeout=5, **kwargs) -> 'Response':
     try:
         response = requests.get(url, timeout=timeout, **kwargs)
         response.raise_for_status()

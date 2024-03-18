@@ -6,7 +6,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('articles', '0002_remove_article_articles_ar_topic_i_6def1c_idx_and_more'),
+        (
+            'articles',
+            '0002_remove_article_articles_ar_topic_i_6def1c_idx_and_more',
+        ),
     ]
 
     operations = [

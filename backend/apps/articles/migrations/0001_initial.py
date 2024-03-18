@@ -32,7 +32,10 @@ class Migration(migrations.Migration):
                 ('slug', models.SlugField(unique_for_date=True)),
                 ('published', models.DateTimeField(auto_now_add=True)),
                 ('status', models.BooleanField(default=True)),
-                ('source', models.URLField(blank=True, max_length=2000, null=True)),
+                (
+                    'source',
+                    models.URLField(blank=True, max_length=2000, null=True),
+                ),
             ],
             options={
                 'ordering': ['-published'],
@@ -155,7 +158,9 @@ class Migration(migrations.Migration):
                 (
                     'content_type',
                     models.ForeignKey(
-                        limit_choices_to={'model__in': ('video', 'image', 'text')},
+                        limit_choices_to={
+                            'model__in': ('video', 'image', 'text')
+                        },
                         on_delete=django.db.models.deletion.CASCADE,
                         to='contenttypes.contenttype',
                     ),
@@ -166,11 +171,14 @@ class Migration(migrations.Migration):
             model_name='article',
             name='topic',
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to='articles.topic'
+                on_delete=django.db.models.deletion.CASCADE,
+                to='articles.topic',
             ),
         ),
         migrations.AddIndex(
             model_name='article',
-            index=models.Index(fields=['topic'], name='articles_ar_topic_i_6def1c_idx'),
+            index=models.Index(
+                fields=['topic'], name='articles_ar_topic_i_6def1c_idx'
+            ),
         ),
     ]

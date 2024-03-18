@@ -13,7 +13,10 @@ def get_cache(key: str, **kwargs) -> Optional['cache']:
 
 
 def set_cache(
-    key: str, value: any, time: int = settings.DEFAULT_CACHE_TIMEOUT, **kwargs
+    key: str,
+    value: any,
+    time: int = settings.DEFAULT_CACHE_TIMEOUT,
+    **kwargs,
 ) -> None:
     """
     Simple function that set cache,

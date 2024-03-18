@@ -14,7 +14,9 @@ BASE_FRONTEND_DIR = BASE_DIR.parent / 'frontend/'
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-a)6jhj959of)aumw)&j_a+v@9xqg=es#7=#^#b0g3&^jmqih0x'
+SECRET_KEY = (
+    'django-insecure-a)6jhj959of)aumw)&j_a+v@9xqg=es#7=#^#b0g3&^jmqih0x'
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 

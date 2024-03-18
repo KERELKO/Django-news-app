@@ -86,7 +86,9 @@ class Migration(migrations.Migration):
                 (
                     'content_type',
                     models.ForeignKey(
-                        limit_choices_to={'model__in': ('text', 'video', 'image')},
+                        limit_choices_to={
+                            'model__in': ('text', 'video', 'image')
+                        },
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name='%(class)s_related',
                         to='contenttypes.contenttype',

@@ -47,10 +47,21 @@ class Article(models.Model):
     slug = models.SlugField(
         unique_for_date='published',
     )
-    published = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=False)
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
-    source = models.URLField(max_length=2000, blank=True, null=True)
+    published = models.DateTimeField(
+        auto_now_add=True,
+    )
+    is_active = models.BooleanField(
+        default=False,
+    )
+    topic = models.ForeignKey(
+        Topic,
+        on_delete=models.CASCADE,
+    )
+    source = models.URLField(
+        max_length=2000,
+        blank=True,
+        null=True,
+    )
     objects = models.Manager()
     active = ActiveManager()
 
@@ -91,14 +102,22 @@ class Article(models.Model):
 
 class Comment(models.Model):
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='written_comments'
+        User,
+        on_delete=models.CASCADE,
+        related_name='written_comments',
     )
     article = models.ForeignKey(
-        Article, on_delete=models.CASCADE, related_name='comments'
+        Article,
+        on_delete=models.CASCADE,
+        related_name='comments',
     )
     body = models.TextField()
-    created = models.DateTimeField(auto_now_add=True)
-    edited = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(
+        auto_now_add=True,
+    )
+    edited = models.DateTimeField(
+        auto_now=True,
+    )
 
     def __str__(self):
         return f'{self.author} left a comment: {self.body}'
