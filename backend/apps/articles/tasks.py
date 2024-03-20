@@ -8,12 +8,12 @@ from .models import Article
 
 @shared_task
 def article_published(article_id: int) -> send_mass_mail:
-    """Send mail to the users who's 'get_notifications' field equals True"""
+    """
+    Send mail to the users whose 'get_notifications' field is equal to True
+    """
     article = get_object_or_404(Article, id=article_id)
     subject = 'New article was published!'
     message = f'Check {article.title}\n'
     users = User.objects.filter(get_notifications=True)
-    recipent_list = []
-    for user in users:
-        recipent_list.append(user.email)
-    return send_mass_mail(subject, message, 'admin@news.com', recipent_list)
+    recipient_list = [(subject, message, 'admin@news.com', (user.email,)) for user in users]
+    send_mass_mail(recipient_list)

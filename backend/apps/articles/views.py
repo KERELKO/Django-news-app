@@ -6,7 +6,6 @@ from django.contrib.postgres.search import SearchVector
 from django.shortcuts import get_object_or_404, redirect
 from django.core.cache import cache
 from django.core.paginator import Paginator
-from django.http import HttpResponse
 from django.conf import settings
 from django.urls import reverse_lazy
 
@@ -215,9 +214,7 @@ class CommentDeleteView(AuthorMixin, SingleObjectMixin, View):
     model = Comment
 
     def dispatch(self, request, *args, **kwargs):
-        response = super().dispatch(request, *args, **kwargs)
-        if isinstance(response, HttpResponse):
-            return response
+        super().dispatch(request, *args, **kwargs)
         return self.delete(request)
 
     def delete(self, request):

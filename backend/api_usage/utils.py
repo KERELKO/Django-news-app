@@ -1,7 +1,7 @@
 import requests
 
 
-def get_response_or_error(url: str, timeout=5, **kwargs) -> 'Response':
+def get_response_or_error(url: str, timeout=5, **kwargs) -> requests.Response:
     try:
         response = requests.get(url, timeout=timeout, **kwargs)
         response.raise_for_status()

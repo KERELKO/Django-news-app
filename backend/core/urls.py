@@ -9,9 +9,7 @@ urlpatterns = [
     path('users/', include('backend.apps.users.urls', namespace='users')),
     path('api/', include('backend.api.urls', namespace='api')),
     path('news/', include('backend.apps.articles.urls', namespace='articles')),
-    path(
-        'content/', include('backend.apps.content.urls', namespace='content')
-    ),
+    path('content/', include('backend.apps.content.urls', namespace='content')),
     path('__debug__/', include('debug_toolbar.urls')),
 ]
 

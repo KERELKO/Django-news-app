@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.core.exceptions import PermissionDenied
 
 
 class AuthorMixin:
@@ -8,9 +8,6 @@ class AuthorMixin:
     """
 
     def dispatch(self, request, *args, **kwargs):
-        if (
-            request.user != self.get_object().author
-            and not request.user.is_staff
-        ):
-            return HttpResponse('You don\'t have permissions')
+        if request.user != self.get_object().author and not request.user.is_staff:
+            raise PermissionDenied('You don\'t have permissions')
         return super().dispatch(request, *args, **kwargs)

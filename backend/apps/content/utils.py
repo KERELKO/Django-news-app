@@ -1,23 +1,28 @@
-from typing import Type, Optional
+from typing import Optional, Dict, Type, Any
+
 from django.apps import apps
-from django.forms import modelform_factory
+from django.db.models import Model
+from django.forms import modelform_factory, ModelForm, Form
+from django.core.files.uploadedfile import UploadedFile
+
 from .exceptions import IncorrectModelNameError
+
 
 ALLOWED_MODELS = ['text', 'image', 'video']
 
 
 def get_form(
-    model: Type['Model'],
-    data: Optional[dict] = None,
-    instance: Optional['ModelForm'] = None,
-    files: dict['str', Type['UploadedFile']] = None,
-) -> Type['Form']:
+    model: Type[Model],
+    data: Optional[Dict[str, Any]] = None,
+    instance: Optional[ModelForm] = None,
+    files: Optional[Dict[str, UploadedFile]] = None,
+) -> Form:
     """Function to get form for the model"""
     form_class = modelform_factory(model=model, fields='__all__')
     return form_class(data=data, instance=instance, files=files)
 
 
-def get_model(model_name: str) -> Optional[Type['Model']]:
+def get_model(model_name: str) -> Optional['Model']:
     """
     Function to get model that appears in 'ALLOWED_MODELS'
     and related to 'content' app,

@@ -36,5 +36,3 @@ DEFAULT_REDIS_CLIENT = redis.Redis(
 AUTH_PASSWORD_VALIDATORS = []
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
-CELERY_ENV = 'backend.core.setting.local'

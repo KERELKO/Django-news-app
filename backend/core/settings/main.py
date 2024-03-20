@@ -39,9 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.postgres',
+    
     'embed_video',
     'rest_framework',
     'debug_toolbar',
+    
     'backend.apps.users.apps.UsersConfig',
     'backend.apps.articles.apps.ArticlesConfig',
     'backend.apps.content.apps.ContentConfig',
