@@ -1,16 +1,18 @@
 import os
 import redis
-from .main import *
+from .base import *
 
 
-DEBUG = False
+DEBUG = True
 
 ADMINS = [
     ('Kyryl Barabash', 'kerelkobarabash@gmail.com'),
 ]
 
+# Bad idea, anyway
 ALLOWED_HOSTS = ['*']
 
+# Postgres
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -32,3 +34,7 @@ DEFAULT_REDIS_CLIENT = redis.Redis(
 )
 
 CACHES['default']['LOCATION'] = REDIS_URL
+
+# Celery
+CELERY_BROKER_URL = 'amqp://message_broker:5672'
+CELERY_RESULT_BACKEND = 'db+postgresql://postgres:postgres@db:5432/postgres'

@@ -28,10 +28,9 @@ class Topic(models.Model):
 
 class ActiveManager(models.Manager):
     """
-    Return queryset where all articles 'is_active' field is True,
+    Returns queryset where all articles 'is_active' field is equal to True,
     field 'is_active' in Article model indicates visibility for users
     """
-
     def get_queryset(self):
         return super().get_queryset().filter(is_active=True)
 

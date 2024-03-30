@@ -5,7 +5,6 @@ from backend.apps.users.models import CustomUser as User
 from .serializers import UserSerializer
 
 
-# ViewSets define the view behavior.
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = User.objects.all()

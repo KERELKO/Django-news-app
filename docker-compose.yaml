@@ -16,6 +16,31 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
+  message_broker:
+    image: rabbitmq:latest
+    ports:
+      - "5672:5672"
+
+  worker:
+    build: .
+    command: celery -A core worker -l info
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PYTHONPATH=/code/backend
+      - DJANGO_SETTINGS_MODULE=backend.core.settings.prod
+    volumes:
+      - ./data/db/:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "celery", "status"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+    depends_on:
+      - message_broker
+      - db
+
   web:
     build: .
     command: python manage.py runserver 0.0.0:8000
@@ -31,3 +56,4 @@ services:
     depends_on:
       - db
       - cache
+      - message_broker

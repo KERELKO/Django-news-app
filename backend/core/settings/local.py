@@ -1,5 +1,5 @@
 import redis
-from .main import *
+from .base import *
 
 
 DEBUG = True

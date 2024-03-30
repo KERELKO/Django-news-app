@@ -11,7 +11,7 @@ BASE_TOPIC_URL = DOMAIN + '/api/news/topics/'
 
 
 def get_article_by_id(id: int) -> dict:
-    url = BASE_ARTICLE_URL + f'{id}'
+    url = BASE_ARTICLE_URL + str(id)
     response = get_response_or_error(url)
     return response.json()
 
