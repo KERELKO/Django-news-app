@@ -3,7 +3,7 @@ from django.core.cache import cache
 from django.conf import settings
 
 
-def get_cache(key: str, **kwargs) -> Optional[cache]:
+def get_cache(key: str, **kwargs) -> Optional[Any]:
     """
     Simple function to get cache from the cache framework,
     you can pass kwargs to the key to get needed cache

@@ -28,10 +28,15 @@ Furthermore, the app offers the flexibility to create diverse content formats fo
 You can install project with  
 ```
 git clone https://github.com/KERELKO/Django-news-app
-```  
-To use all features of the project you can use docker compose  
+cd Django-news-app
+```
+Use Docker to run the app
 ```
 docker compose up
+```
+Apply migrations when app is running in Docker container
+```
+make migrate
 ```
 
 > [!NOTE]

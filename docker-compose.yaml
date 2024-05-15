@@ -31,7 +31,7 @@ services:
       - PYTHONPATH=/code/backend
       - DJANGO_SETTINGS_MODULE=backend.core.settings.prod
     volumes:
-      - ./data/db/:/var/lib/postgresql/data
+      - .:/code
     healthcheck:
       test: ["CMD", "celery", "status"]
       interval: 10s
