@@ -30,9 +30,7 @@ You can install project with
 git clone https://github.com/KERELKO/Django-news-app
 cd Django-news-app
 ```
-make .env file based on .env.example
-```
-Use Docker to run the app
+__make .env file based on .env.example__, then use Docker to run the app
 ```
 docker compose up
 ```
